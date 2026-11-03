@@ -1,3 +1,11 @@
+# 2026-11-03 Open upper boundary in every main room
+
+Removed the physical ceiling colliders from Main_Room01 and Main_Room02. Main_Room03 and Main_LiftLanding already had open tops. The camera still clamps its top edge to each scene's `roomBounds`, so the goat may jump above the visible frame without moving the camera outside the room. Updated the Room 1/2 generators and added a rerunnable Unity scene patch for all four scenes.
+
+PASS: Unity 6000.6.0f1 batch scene patch completed. PASS: focused PlayMode `MainRoomTests` 2/2, including all four main scenes with the goat above the camera while the camera top remains within `roomBounds`; the existing full Room 1 route test also passed. Evidence: `Artifacts/Logs/open-top-main-room-tests.xml` and `open-top-scene-patch.log`. PASS: no `Room ceiling`/`Ceiling` object remains in the four main scenes; `git diff --check` passed. NOT RUN: manual keyboard playtest or Web build.
+
+---
+
 # 2026-11-03 Upstream PR validation
 
 Target: cpcap1214/Goat-Game main, from W35L3YL0/Goat-Game. Includes existing commit ee84146 plus the explicit EchoFoothills debug-menu label and current documentation updates. Original tutorial/EchoFoothills scenes remain preserved.

@@ -1,3 +1,9 @@
+# 2026-11-03 Open upper boundary regression
+
+PASS: `unity run ... -executeMethod OneMoreTime.EditorTools.MainRoomContentBuilder.RemoveMainRoomCeilings` saved all four main scenes using Unity 6000.6.0f1. PASS: `unity test ... --mode PlayMode --filter OneMoreTime.Tests.MainRoomTests` executed 2 tests, 2 passed, 0 failed. `EveryMainRoomHasOpenTopAndBoundedCamera` loaded Main_Room01, Main_Room02, Main_Room03 and Main_LiftLanding, confirmed no ceiling object, placed the goat above the visible frame, and confirmed the camera top stayed at or below `roomBounds.yMax`. `RoomOneRouteCheckpointPitAndExit` also passed. Evidence: `Artifacts/Logs/open-top-main-room-tests.xml`. NOT RUN: human playtest or Web build.
+
+---
+
 # 2026-11-03 Upstream PR validation
 
 Target: cpcap1214/Goat-Game main, from W35L3YL0/Goat-Game. Includes existing commit ee84146 plus the explicit EchoFoothills debug-menu label and current documentation updates. Original tutorial/EchoFoothills scenes remain preserved.

@@ -31,6 +31,17 @@ public static class MainRoomContentBuilder {
   var paths=new[]{Room3Path,LandingPath};EditorBuildSettings.scenes=EditorBuildSettings.scenes.Where(s=>!paths.Contains(s.path)).Concat(paths.Select(p=>new EditorBuildSettingsScene(p,true))).ToArray();AssetDatabase.SaveAssets();
  }
  public static void RefreshPresentation(){MainRoomArtBuilder.Generate();Refresh(MainRoomBuilder.Path);Refresh(RoomTwoBuilder.Path);}
+ [MenuItem("Tools/One More Time/Remove Main Room Ceilings")]
+ public static void RemoveMainRoomCeilings(){
+  if(EditorApplication.isPlaying)throw new System.InvalidOperationException("Exit Play first");
+  foreach(string path in new[]{MainRoomBuilder.Path,RoomTwoBuilder.Path,Room3Path,LandingPath}){
+   if(!File.Exists(path))continue;DemoBuilder.BackupScene(path);var previous=SceneManager.GetActiveScene();var scene=SceneManager.GetSceneByPath(path);bool loaded=scene.IsValid()&&scene.isLoaded;
+   if(!loaded)scene=EditorSceneManager.OpenScene(path,OpenSceneMode.Additive);
+   var room=scene.GetRootGameObjects().SelectMany(x=>x.GetComponentsInChildren<MainRoom>(true)).Single();
+   foreach(string name in new[]{"Room ceiling","Ceiling"}){var ceiling=room.transform.Find(name);if(ceiling!=null)Object.DestroyImmediate(ceiling.gameObject);}
+   EditorSceneManager.SaveScene(scene,path);if(!loaded)EditorSceneManager.CloseScene(scene,true);if(previous.IsValid()&&previous.isLoaded)SceneManager.SetActiveScene(previous);
+  }
+ }
  static void Refresh(string path){
   if(!File.Exists(path))return;DemoBuilder.BackupScene(path);var previous=SceneManager.GetActiveScene();var scene=SceneManager.GetSceneByPath(path);bool loaded=scene.IsValid()&&scene.isLoaded;if(!loaded)scene=EditorSceneManager.OpenScene(path,OpenSceneMode.Additive);
   var room=scene.GetRootGameObjects().SelectMany(x=>x.GetComponentsInChildren<MainRoom>(true)).Single();room.deathY=Mathf.Min(room.roomBounds.yMin-1.5f,-4.5f);MainRoomArtBuilder.Background(room.gameObject,room);

@@ -38,7 +38,6 @@ public static class MainRoomBuilder {
   // Bounds exclude offscreen entry/exit corridors, which are used only by transition walks.
   room.entranceBarrier=Solid(root.transform,"Entrance closes after walk-in",new Rect(-.5f,-10,.5f,30),layer).GetComponent<BoxCollider2D>();room.entranceBarrier.enabled=false;
   Solid(root.transform,"Left room boundary",new Rect(-3.5f,-10,.5f,31),layer);
-  Solid(root.transform,"Room ceiling",new Rect(-3,20,83.4f,.5f),layer);
   Solid(root.transform,"Right room boundary",new Rect(80.4f,-10,.5f,31),layer);
   Statue(root.transform,room);
   var sign=DemoBuilder.Sprite("Environment/props/sign.png");if(sign!=null)PresentationBuilder.Image(root.transform,"Exit trail marker",sign,new Vector2(75,12.8f),new Vector2(.7f,.8f),4,Color.white);

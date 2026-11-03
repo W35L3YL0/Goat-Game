@@ -1,3 +1,9 @@
+# Shared main-room upper boundary
+
+Main_Room01, Main_Room02, Main_Room03 and Main_LiftLanding have no physical ceiling. The camera remains clamped to `roomBounds`; the player can jump above the visible top without extending the camera beyond the designed room frame. Side boundaries remain collidable.
+
+---
+
 # Room 3 revision — 黑板 9.png (2026-11-03)
 
 Upper route revised: left wooden step x=3..5/y=27.5; high left grass x=5..8/y=31; high middle grass x=12..14/y=32; upper timed wood x=18..20/y=35, release delay 20 seconds; right wood x=23..24/y=36. Existing 3-second platform and lower section unchanged. Lift/exit stays y=39, dock x=31. Both timers use the same plate, with hidden red links and small counters hidden at zero. Intended to prevent the direct single-freeze jump from the y=25 ledge; complete traversal not tested.

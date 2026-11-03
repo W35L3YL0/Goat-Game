@@ -38,6 +38,19 @@ public class MainRoomTests {
   Assert.AreEqual(MainRoom.RoomPhase.Complete,room.Phase);Assert.AreEqual(1,room.Fade);
   Assert.Greater(room.player.Position.x,room.roomBounds.xMax);
  }
+ [UnityTest]public IEnumerator EveryMainRoomHasOpenTopAndBoundedCamera(){
+  string[] scenes={MainRoom.SceneName,MainRoom.RoomTwoScene,MainRoom.RoomThreeScene,MainRoom.LiftLandingScene};
+  foreach(string sceneName in scenes){
+   EditorSceneManager.LoadSceneInPlayMode("Assets/_OneMoreTime/Scenes/"+sceneName+".unity",new LoadSceneParameters(LoadSceneMode.Single));yield return null;
+   room=Object.FindFirstObjectByType<MainRoom>();room.AutoTick=false;
+   Assert.IsNull(room.transform.Find("Room ceiling"),sceneName+" still has a physical ceiling");
+   Assert.IsNull(room.transform.Find("Ceiling"),sceneName+" still has a physical ceiling");
+   room.player.ResetAt(new Vector2(room.roomBounds.center.x,room.roomBounds.yMax+2));room.SendMessage("LateUpdate");
+   float cameraTop=room.view.transform.position.y+room.view.orthographicSize;
+   Assert.That(cameraTop,Is.LessThanOrEqualTo(room.roomBounds.yMax+.001f),sceneName+" camera crossed its upper bound");
+   Assert.Greater(room.player.Position.y,cameraTop,sceneName+" player should be allowed above the camera view");
+  }
+ }
 }
 }
 #endif

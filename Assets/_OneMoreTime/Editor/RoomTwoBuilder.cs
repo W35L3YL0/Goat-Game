@@ -27,7 +27,7 @@ public static class RoomTwoBuilder {
   Land(root.transform,"Raised checkpoint ledge",new Rect(19,-6,8,11),layer);
   Land(root.transform,"Exit bank",new Rect(36,-6,12,11),layer);
   room.entranceBarrier=Solid(root.transform,"Entrance closes after walk-in",new Rect(-.5f,-6,.5f,17),layer).GetComponent<BoxCollider2D>();room.entranceBarrier.enabled=false;
-  Solid(root.transform,"Left boundary",new Rect(-3.5f,-6,.5f,18),layer);Solid(root.transform,"Right boundary",new Rect(48,-6,.5f,18),layer);Solid(root.transform,"Ceiling",new Rect(-3,9,51,.5f),layer);
+  Solid(root.transform,"Left boundary",new Rect(-3.5f,-6,.5f,18),layer);Solid(root.transform,"Right boundary",new Rect(48,-6,.5f,18),layer);
   MainRoomBuilder.Statue(root.transform,room);
   var ability=root.AddComponent<ShutterAbility>();ability.room=room;room.shutter=ability;
   var pickup=new GameObject("Purple camera - unlock Shutter");pickup.transform.SetParent(root.transform);pickup.transform.position=new Vector2(12.4f,.55f);ability.pickup=pickup.transform;
