@@ -3,6 +3,27 @@ using System.Collections;using System.Collections.Generic;using System.Linq;usin
 using UnityEngine.InputSystem;using UnityEngine.InputSystem.LowLevel;
 namespace OneMoreTime.Tests {
 public class ChapterOneTests {
+ [UnityTest]public IEnumerator MainJourneyKeepsIntroAndLoadsRoomOne(){
+  EditorSceneManager.LoadSceneInPlayMode("Assets/_OneMoreTime/Scenes/MainMenu.unity",new LoadSceneParameters(LoadSceneMode.Single));yield return null;
+  var menu=Object.FindFirstObjectByType<MenuScreen>();var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+  typeof(MenuScreen).GetMethod("StartJourney",flags).Invoke(menu,null);
+  Assert.IsNotNull(typeof(MenuScreen).GetField("opening",flags).GetValue(menu));
+  typeof(MenuScreen).GetMethod("EnterLevel",flags).Invoke(menu,null);yield return null;
+  Assert.AreEqual(MainRoom.SceneName,SceneManager.GetActiveScene().name);Assert.IsNotNull(Object.FindFirstObjectByType<MainRoom>());
+ }
+
+ [UnityTest]public IEnumerator TutorialMenuLoadsAllFiveExistingLevels(){
+  var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+  for(int i=1;i<=5;i++){
+   EditorSceneManager.LoadSceneInPlayMode("Assets/_OneMoreTime/Scenes/MainMenu.unity",new LoadSceneParameters(LoadSceneMode.Single));yield return null;
+   var menu=Object.FindFirstObjectByType<MenuScreen>();Assert.IsNotNull(menu);
+   typeof(MenuScreen).GetMethod("OpenTutorial",flags).Invoke(menu,new object[]{i});yield return null;
+   Assert.AreEqual(i==5?ChapterLayout.Scene:SceneFlow.Scenes[i],SceneManager.GetActiveScene().name);
+   if(i==5)Assert.IsNotNull(Object.FindFirstObjectByType<NostalgiaChapter>());
+   else Assert.IsNotNull(Object.FindFirstObjectByType<RunManager>());
+  }
+  SceneFlow.Load(0);yield return null;Assert.IsNotNull(Object.FindFirstObjectByType<MenuScreen>());
+ }
  NostalgiaChapter g;int steps;
  [UnityTest]public IEnumerator KeyboardTutorialSimultaneousJumpFilterAndPause(){
   EditorSceneManager.LoadSceneInPlayMode("Assets/_OneMoreTime/Scenes/Chapter01_EchoFoothills.unity",new LoadSceneParameters(LoadSceneMode.Single));yield return null;

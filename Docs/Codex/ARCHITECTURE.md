@@ -1,3 +1,7 @@
+## Main-room mechanisms (2026-11-03)
+
+`MainRoom.Step` evaluates pressure sources, ticks `RoomPlatform` once, syncs world transforms, then advances `PlayerMotor2D`. The motor owns platform carrying (excluding the carrying collider from its own displacement casts), relative-top landing, jumping without inherited velocity, and drop-through. Platforms do not move the player independently. `RoomPlatform` supports optional endpoint travel and release-delay countdown; disabled platforms remain faintly visible with no collision. No Update/coroutine timer runs outside the room clock. `RoomCheckpoint[]` stores multiple once-activated statues; `checkpoint` becomes the newest saved feet position. Retry/death retain Shutter and reset mechanisms, then reevaluate preserved pressure sources.
+
 ## 2026-10-31 記憶解謎更新
 
 現行第一大關已加入ChapterMemory：定格庭院、雙影水閘、搭上昨天三種解謎，E/Q記憶、F年代、X互動。場景入口與生成器不變；詳CHAPTER_ONE.md及最新TEST_REPORT.md，以下為舊版歷史。

@@ -2,6 +2,11 @@ using UnityEngine;using UnityEngine.SceneManagement;
 namespace OneMoreTime {
 public static class SceneFlow {
  public static readonly string[] Scenes={"MainMenu","L01_Freeze","L02_Pressure","L03_Trace","L04_Timing","Ending"};
+ public static void LoadMainRoom(){Time.timeScale=1;
+ #if UNITY_EDITOR
+ if(!Application.CanStreamedLevelBeLoaded(MainRoom.SceneName)){UnityEditor.SceneManagement.EditorSceneManager.LoadSceneInPlayMode("Assets/_OneMoreTime/Scenes/"+MainRoom.SceneName+".unity",new LoadSceneParameters(LoadSceneMode.Single));return;}
+ #endif
+ SceneManager.LoadScene(MainRoom.SceneName);}
  public static void LoadChapter(){Time.timeScale=1;
  #if UNITY_EDITOR
  if(!Application.CanStreamedLevelBeLoaded(ChapterLayout.Scene)){UnityEditor.SceneManagement.EditorSceneManager.LoadSceneInPlayMode("Assets/_OneMoreTime/Scenes/"+ChapterLayout.Scene+".unity",new LoadSceneParameters(LoadSceneMode.Single));return;}
