@@ -38,7 +38,7 @@ public sealed class MenuScreen:MonoBehaviour {
   GameUI.Shade();GameUI.Frame(new Rect(210,28,540,484));
   GameUI.Text(new Rect(245,48,470,42),"玩法測試",32,GameUI.Gold);
   GameUI.Text(new Rect(245,96,470,30),"選擇練習，熟悉山羊的記憶能力。",18);
-  string[] labels={"01  定格記憶","02  踏板與門","03  錄影與回放","04  時序與崩塌平台","05  回聲山麓 · 綜合練習"};
+  string[] labels={"01  定格記憶","02  踏板與門","03  錄影與回放","04  時序與崩塌平台","05  EchoFoothills / 回聲山麓"};
   for(int i=0;i<labels.Length;i++)if(GameUI.Button(new Rect(245,140+i*54,470,42),labels[i]))OpenTutorial(i+1);
   if(GameUI.Button(new Rect(245,438,470,42),"回到主選單",false,"Esc"))ReturnToMenu();
  }

@@ -1,3 +1,9 @@
+# Room 3 revision — 黑板 9.png (2026-11-03)
+
+Upper route revised: left wooden step x=3..5/y=27.5; high left grass x=5..8/y=31; high middle grass x=12..14/y=32; upper timed wood x=18..20/y=35, release delay 20 seconds; right wood x=23..24/y=36. Existing 3-second platform and lower section unchanged. Lift/exit stays y=39, dock x=31. Both timers use the same plate, with hidden red links and small counters hidden at zero. Intended to prevent the direct single-freeze jump from the y=25 ledge; complete traversal not tested.
+
+---
+
 # 2026-11-03 Room 3 upper route — 黑板 8.png
 
 Updated only the route above the y=22 timer/checkpoint terrace. Existing terrace, plate, statues, lower platforms, shuttle, pit/death threshold and entrance remain intact. One dot spacing is one unit. Added grass ledges x=2..4/y=25, x=9..11/y=25, x=5..8/y=29 and x=12..14/y=30. The existing plate controls both the relocated 3-second platform x=16..18/y=25 and new 15-second platform x=18..20/y=33. Pressure holds each at its own full time; release counts down independently. Counters remain small, centered and hidden at zero. No red lines or tips were added.

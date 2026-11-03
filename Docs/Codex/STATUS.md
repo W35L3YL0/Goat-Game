@@ -1,3 +1,19 @@
+# 2026-11-03 Upstream PR validation
+
+Target: cpcap1214/Goat-Game main, from W35L3YL0/Goat-Game. Includes existing commit ee84146 plus the explicit EchoFoothills debug-menu label and current documentation updates. Original tutorial/EchoFoothills scenes remain preserved.
+
+Latest real Unity VerticalRoomTests: 7 executed, 5 PASS, 2 FAIL (Artifacts/Logs/room3-pr-tests.json). HeldKeyboardMovementSurvivesShutter failed at line 23 (expected Snapping=true). SharedPlateControlsIndependentThreeAndTwentySecondTimers expected 20 but the current serialized scene has releaseDelay=15. UpperRouteExceedsDirectSingleFreezeJumpReach PASS. Preserve the current scene state for review; do not claim all tests pass. Earlier entries describe previous validation snapshots. No full-route/manual/Web validation in this PR preparation.
+
+---
+
+# 2026-11-03 EchoFoothills visible in Debug Mode
+
+Renamed the existing fifth Debug Mode entry to `05 EchoFoothills / 回聲山麓`. It continues to call SceneFlow.LoadChapter and load Chapter01_EchoFoothills. Original scene is retained in Build Settings; its F filter toggle, E/Q memory and X interaction logic remain intact. PASS: Unity recompile_status completed, no errors, compilationFailed=false. PASS: static routing/build-settings inspection and git diff --check. NOT RUN: clicking the menu in a manual playtest.
+
+Prior Room 3 黑板 9 update is saved: high grass y=31/32, new left wood step x=3..5 at y=27.5, upper timed platform y=35 with 20 seconds, right step y=36. Lift remains y=39. Lower objects preserved (Artifacts/Logs/room3-board9-preservation.json). Initial tests: 6 PASS, 1 FAIL because the new geometry assertion read empty bounds from a disabled collider. Assertion corrected to use transform/size; compiled, but rerun pending after conversation interruption. No claim of completed full-route or shortcut playtest. Evidence: Artifacts/Logs/room3-board9-tests.json.
+
+---
+
 # 2026-11-03 Room 3 upper route — 黑板 8.png
 
 Updated only the route above the y=22 timer/checkpoint terrace. Existing terrace, plate, statues, lower platforms, shuttle, pit/death threshold and entrance remain intact. One dot spacing is one unit. Added grass ledges x=2..4/y=25, x=9..11/y=25, x=5..8/y=29 and x=12..14/y=30. The existing plate controls both the relocated 3-second platform x=16..18/y=25 and new 15-second platform x=18..20/y=33. Pressure holds each at its own full time; release counts down independently. Counters remain small, centered and hidden at zero. No red lines or tips were added.
