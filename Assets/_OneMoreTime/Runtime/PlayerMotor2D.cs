@@ -10,6 +10,15 @@ public sealed class PlayerMotor2D : MonoBehaviour {
  public int VisualState{get;private set;}public int VisualFrame{get;private set;}float poseTime,landingTime;
  Collider2D droppedPlatform,carriedCollider;
  Rigidbody2D body; readonly RaycastHit2D[] hits=new RaycastHit2D[16]; float coyote,buffer;
+ public struct RewindState {
+  public Vector2 position,velocity;public bool grounded,onEcho;public int facing,visualState,visualFrame;
+  public Collider2D ground,dropped;public float coyote,buffer,poseTime,landingTime;
+ }
+ public RewindState CaptureRewind()=>new RewindState{position=Position,velocity=Velocity,grounded=Grounded,onEcho=OnEcho,facing=Facing,visualState=VisualState,visualFrame=VisualFrame,ground=GroundCollider,dropped=droppedPlatform,coyote=coyote,buffer=buffer,poseTime=poseTime,landingTime=landingTime};
+ public void RestoreRewind(RewindState s){
+  if(body==null)Init();Position=s.position;Velocity=s.velocity;Grounded=s.grounded;OnEcho=s.onEcho;Facing=s.facing;VisualState=s.visualState;VisualFrame=s.visualFrame;
+  GroundCollider=s.ground;droppedPlatform=s.dropped;carriedCollider=null;coyote=s.coyote;buffer=s.buffer;poseTime=s.poseTime;landingTime=s.landingTime;body.position=Position;transform.position=Position;
+ }
  public void Init(){body=GetComponent<Rigidbody2D>();body.bodyType=RigidbodyType2D.Kinematic;body.gravityScale=0;body.freezeRotation=true;var c=GetComponent<BoxCollider2D>();c.size=new Vector2(tuning.width,tuning.height);c.offset=new Vector2(0,tuning.height/2);Position=body.position;}
  public void ResetAt(Vector2 p){if(body==null)Init();Position=p;Velocity=Vector2.zero;Grounded=OnEcho=false;GroundCollider=null;droppedPlatform=null;coyote=buffer=poseTime=landingTime=0;VisualState=VisualFrame=0;body.position=p;transform.position=p;}
  // A single motor owns every displacement, including platform carry. Echo has no solid side collider.

@@ -3,6 +3,14 @@ using System.Collections;using System.Collections.Generic;using System.Linq;usin
 using UnityEngine.InputSystem;using UnityEngine.InputSystem.LowLevel;
 namespace OneMoreTime.Tests {
 public class ChapterOneTests {
+ [UnityTest]public IEnumerator PastLensTransitionAndRespawn(){
+  yield return Load();Assert.IsFalse(g.TrySwitch());Assert.AreEqual(0,g.Lens.Remaining);
+  g.player.ResetAt(new Vector2(7,0));Step(default,2);Assert.IsTrue(g.Unlocked);
+  Assert.IsTrue(g.TrySwitch());Assert.AreEqual(PastLensEffect.Duration,g.Lens.Remaining);Step(default,20);
+  Assert.AreEqual(0,g.Lens.Remaining);Assert.AreEqual(1,g.Lens.PastAmount);
+  Assert.IsTrue(g.TrySwitch());Step(default,20);Assert.AreEqual(0,g.Lens.PastAmount);
+  Assert.IsTrue(g.TrySwitch());Step(default,4);Assert.Greater(g.Lens.PastAmount,0);g.Respawn();Assert.AreEqual(0,g.Lens.PastAmount);Assert.AreEqual(0,g.Lens.Remaining);
+ }
  [UnityTest]public IEnumerator MainJourneyKeepsIntroAndLoadsRoomOne(){
   EditorSceneManager.LoadSceneInPlayMode("Assets/_OneMoreTime/Scenes/MainMenu.unity",new LoadSceneParameters(LoadSceneMode.Single));yield return null;
   var menu=Object.FindFirstObjectByType<MenuScreen>();var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;

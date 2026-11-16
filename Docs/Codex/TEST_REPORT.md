@@ -1,3 +1,65 @@
+# 2026-11-16 Q restarts active replay
+
+Tap Q during playback to restart from time zero in the forward direction, preserving the saved recording and live player/world. Holding Q still records a replacement after 0.5 seconds. Both debug tiers supported. PASS: Unity compilation; replay suite 10/10 including mid-forward/backward restart, preserved memory/player and existing hold behavior; git diff --check. First runner returned stale running status after exiting; retry passed. Evidence: Artifacts/Logs/replay-restart-tests.json. Manual keyboard playtest NOT RUN.
+
+# 2026-11-16 Replay playhead marker
+
+Added a warm cream circular playhead with a dark amber outline at the timeline cursor. It follows existing clamped progress in forward/backward playback and fast rewind, and stays still while held/paused. Both debug tiers use it. Display-only indicator; no drag seeking added. PASS: Unity compilation, git diff --check. No gameplay tests rerun for this drawing-only change; manual visual playtest NOT RUN.
+
+# 2026-11-16 Replay bar placement
+
+Replay timeline thickness increased from 4 to 10 UI pixels; y moved from 458 to 486, leaving 7 pixels above the gameplay viewport bottom/footer. Applies to both debug replay tiers; amber styling and width retained. PASS: git diff --check. Layout-only change; no gameplay tests rerun.
+
+# 2026-11-16 Fast-rewind tint fix
+
+RewindPlaytest.Pose now uses the shared amber ReplayColor during the fast world rewind instead of the leftover cyan tint. Live goat returns to white after rewind. Applies to both basic/upgraded debug entries. PASS: Unity compilation, git diff --check, replay suite 9/9 including rewind tint and restored normal color assertions. Initial targeted test runner failed to report completion; full-suite retry passed. Evidence: Artifacts/Logs/rewind-tint-test.json. NOT RUN: manual visual playtest.
+
+# 2026-11-16 Faster recording and warm minimal replay UI
+
+Both replay tiers now charge in 0.5 seconds. Recording film strips are 42 UI pixels high (was 24), travel at 180 pixels/second (was 28), and reveal with a soft left-to-right fade over 0.16 seconds. Header shifted down to avoid the thicker strips. Timeline reduced to only a warm amber track/fill, matching the thin trace and afterimage. Past lens unchanged per clarification.
+
+PASS: Unity compilation; RewindPlaytestTests 9/9 including 24-tick/25-tick hold boundary and warm ghost/trace assertions; git diff --check. First runner attempt hit an Editor Play mode state error; retry from Edit mode passed. Evidence: Artifacts/Logs/replay-warm-ui-tests.json. Recording and playback screenshots inspected in Artifacts/Logs/replay-warm-captures. Final strip seam cleanup compiled. NOT RUN: human full-speed input/animation playtest. Playtest entries: Debug Mode 06 Basic Replay / 07 Upgraded Replay.
+
+# 2026-11-16 Past lens presentation
+
+EchoFoothills F era switching now triggers a 0.36-second circular glass lens animation (expanding into past, contracting into present). Past view has subtle warm tint, fine grain and edge darkening beneath the HUD. Collision switches remain immediate; blocked switches do not trigger the effect. Respawn clears the effect; pause freezes its fixed-step clock.
+
+PASS: Unity compilation (zero errors/warnings), PastLensTransitionAndRespawn 1/1, git diff --check. Evidence: Artifacts/Logs/past-lens-tests.json. Keyboard regression filter returned zero tests, so NOT RUN. Captured game-view images in Artifacts/Logs/past-filter-captures; static visuals inspected, full-speed human animation/keyboard playtest NOT RUN. Final rim-opacity correction compiled successfully. Try Main Menu > Debug Mode > 05 EchoFoothills, collect the lens and press F.
+
+# 2026-11-16 Separate basic and upgraded replay
+
+Main Menu > Debug Mode now offers 06 Basic Replay and 07 Upgraded Replay. Both use Debug_Rewind with separate ability tiers; basic supports forward playback and endpoint persistence, while upgraded adds Left Shift reversal/hold pause. `ReplayUpgradeUnlocked` defaults false; `UnlockReplayUpgrade()` is the explicit later-pickup hook. No later-game pickup location or cross-room progression persistence was assigned.
+
+PASS: Unity compilation, 9/9 live RewindPlaytestTests, git diff --check. New tests exercise both real SceneFlow entry routes, basic ignoring Shift, unlocking on the existing recording, and no upgrade leakage on reload. Evidence: Artifacts/Logs/replay-tier-tests.json. NOT RUN: manual menu/keyboard playtest. Next: user playtest of entries 06 and 07.
+
+# 2026-11-16 Hold Left Shift to pause replay
+
+In Debug_Rewind, Left Shift immediately stops the replay cursor while held; the player/world keep simulating and the echo stays active. Release a hold to resume the same direction. A quick tap under 0.25 seconds toggles direction on release. HUD/timeline show PAUSED.
+
+PASS: Unity compilation with zero errors/warnings; live Pipeline RewindPlaytestTests 7/7 passed, including held cursor/pose, continued moving-platform simulation, and resuming both directions. Evidence: Artifacts/Logs/rewind-hold-tests.json. PASS: git diff --check. NOT RUN: human keyboard playtest. The initial test-launch permission review timed out; the permitted retry succeeded. Next: user playtest via Main Menu > Debug Mode > 06 Rewind.
+
+# 2026-11-16 Persistent bidirectional replay
+
+Debug_Rewind afterimages now stay active at the final frame, including support and pressure-plate interaction. Left Shift toggles forward/backward from the current cursor and resumes from a held endpoint; it never loops automatically. The timeline shows direction/HELD. Hold Q still overwrites after 1 second. Entry: Main Menu > Debug Mode > 06 Rewind.
+
+PASS: live Unity compilation (0 errors/warnings); `unity command run_tests --mode playmode --filter RewindPlaytestTests --async_tests` plus `test_status`: 6/6 passed. Coverage includes mid-playback reversal, both exact endpoints, persistent plate/gate, pause, overwrite and world rewind. Evidence: Artifacts/Logs/rewind-direction-tests.json. PASS: git diff --check. NOT RUN: human keyboard playtest or Web build. Next: user playtest.
+
+# 2026-11-15 Rewind presentation validation
+
+PASS: live Unity Pipeline `run_tests --mode playmode --filter RewindPlaytestTests --async_tests`, followed by `test_status`: 5 total, 5 passed. Updated checks cover the 1-second threshold, charge state, hidden ghost support renderer, and replay progress freezing during pause and reaching 1 at completion. Evidence: Artifacts/Logs/rewind-presentation-tests.json.
+
+PASS: final `recompile_status` completed with failed=false and errors=[] after a domain-reload connection interruption. PASS: live Game view inspection at 1280x720 of charge circle, recording film strips/filter, subtle trace and mid-playback timeline. Fixed ring placement and stale footer rendering found during inspection. Captures: Artifacts/Logs/rewind-presentation-captures/captured-assets/Logs/rewind-{charge,recording,playback}.png. Visual checks use scripted simulation steps, not human keyboard playtesting. NOT RUN: Web build/browser validation.
+
+# 2026-11-14 Rewind playtest
+
+PASS: `unity run /Users/wesley/Documents/GitHub/Goat-Game --editor-version 6000.6.0f1 --no-tail --log-file Artifacts/Logs/rewind-debug-build.log -- -executeMethod OneMoreTime.EditorTools.RewindPlaytestBuilder.Build` completed with exit 0 after handling batch mode's initial untitled scene. The real Editor produced Debug_Rewind.unity, its material/metadata and enabled Build Settings entry.
+
+PASS: `unity test /Users/wesley/Documents/GitHub/Goat-Game --editor-version 6000.6.0f1 --mode PlayMode --filter OneMoreTime.Tests.RewindPlaytestTests --output Artifacts/Logs/rewind-debug-tests.xml --format json`: 5 executed, 5 passed. Tests exercise the 1.5-second threshold, release of the initiating hold, overwrite during playback, persistent path, multi-tick reverse, restoration at the current recording start, crate/platform reversal, `affectedByRewind=false`, paused clock, 501-frame/10-second cap, playback expiration, and ghost-operated plate/gate without live-player teleporting.
+
+PASS: same command with filter `OneMoreTime.Tests.MotorTests` and output `Artifacts/Logs/rewind-motor-regression.xml`: 20 executed, 20 passed. PASS: git diff --check. NOT RUN: manual keyboard playtesting, rendered UI inspection, Web build/browser validation. These results do not supersede the older unrelated Room 3 regression failures.
+
+---
+
 # 2026-11-03 Open upper boundary regression
 
 PASS: `unity run ... -executeMethod OneMoreTime.EditorTools.MainRoomContentBuilder.RemoveMainRoomCeilings` saved all four main scenes using Unity 6000.6.0f1. PASS: `unity test ... --mode PlayMode --filter OneMoreTime.Tests.MainRoomTests` executed 2 tests, 2 passed, 0 failed. `EveryMainRoomHasOpenTopAndBoundedCamera` loaded Main_Room01, Main_Room02, Main_Room03 and Main_LiftLanding, confirmed no ceiling object, placed the goat above the visible frame, and confirmed the camera top stayed at or below `roomBounds.yMax`. `RoomOneRouteCheckpointPitAndExit` also passed. Evidence: `Artifacts/Logs/open-top-main-room-tests.xml`. NOT RUN: human playtest or Web build.
