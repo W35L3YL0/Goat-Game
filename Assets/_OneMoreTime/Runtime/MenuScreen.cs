@@ -9,7 +9,7 @@ public sealed class MenuScreen:MonoBehaviour {
  void StartJourney(){if(ending)SceneFlow.Load(0);else{opening?.Dispose();opening=new OpeningCinematic();}}
  void EnterLevel(){if(enteringLevel)return;enteringLevel=true;SceneFlow.LoadMainRoom();}
  void ReturnToMenu(){tutorials=false;instructions=false;}
- void OpenTutorial(int index){if(enteringLevel)return;enteringLevel=true;if(index==6||index==7)SceneFlow.LoadRewindPlaytest(index==7);else if(index==5)SceneFlow.LoadChapter();else SceneFlow.Load(index);}
+ void OpenTutorial(int index){if(enteringLevel)return;enteringLevel=true;if(index==8)SceneFlow.LoadWorldOneGallery();else if(index==6||index==7)SceneFlow.LoadRewindPlaytest(index==7);else if(index==5)SceneFlow.LoadChapter();else SceneFlow.Load(index);}
  void Update(){var k=Keyboard.current;if(ending){endingCinematic.Sequence.Tick(Time.unscaledDeltaTime);if(k!=null){if(k.escapeKey.wasPressedThisFrame)endingCinematic.Sequence.Skip();else if(endingCinematic.Sequence.Complete&&k.enterKey.wasPressedThisFrame)StartJourney();}return;}if(enteringLevel)return;
   if(tutorials){if(k!=null&&k.escapeKey.wasPressedThisFrame)ReturnToMenu();return;}
   if(opening!=null){opening.Sequence.Tick(Time.unscaledDeltaTime);if(k!=null){if(k.escapeKey.wasPressedThisFrame)opening.Sequence.Skip();else if(k.enterKey.wasPressedThisFrame||k.spaceKey.wasPressedThisFrame)opening.Sequence.Next();}if(opening.Sequence.Complete)EnterLevel();return;}
@@ -38,8 +38,8 @@ public sealed class MenuScreen:MonoBehaviour {
   GameUI.Shade();GameUI.Frame(new Rect(210,28,540,484));
   GameUI.Text(new Rect(245,48,470,42),"玩法測試",32,GameUI.Gold);
   GameUI.Text(new Rect(245,96,470,30),"選擇練習，熟悉山羊的記憶能力。",18);
-  string[] labels={"01  定格記憶","02  踏板與門","03  錄影與回放","04  時序與崩塌平台","05  EchoFoothills / 回聲山麓","06  Basic Replay / 基礎回放","07  Upgraded Replay / 進階回放"};
-  for(int i=0;i<labels.Length;i++)if(GameUI.Button(new Rect(245,130+i*43,470,36),labels[i]))OpenTutorial(i+1);
+  string[] labels={"01  定格記憶","02  踏板與門","03  錄影與回放","04  時序與崩塌平台","05  EchoFoothills / 回聲山麓","06  Basic Replay / 基礎回放","07  Upgraded Replay / 進階回放","08  World 1 Art / 森林與大瀑布"};
+  for(int i=0;i<labels.Length;i++)if(GameUI.Button(new Rect(245,128+i*38,470,33),labels[i]))OpenTutorial(i+1);
   if(GameUI.Button(new Rect(245,450,470,40),"回到主選單",false,"Esc"))ReturnToMenu();
  }
  void DrawStory(){

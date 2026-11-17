@@ -728,3 +728,17 @@ Web第三關自動輸入曾跳早，透過同一快照R重試、稍延後第二�
 沒有必要阻塞。可選UI-05無獨立新手測試者，未量測初玩10–15分鐘；Safari／Firefox與其他裝置未測。Web存在非必要URP後處理shader警告；瀏覽器工具環境有無來源MutationObserver錯誤，來源未確認但不影響完整通關，詳TEST_REPORT。未宣稱主控台零錯誤或跨瀏覽器完全驗證。
 
 下一個可直接執行動作：開啟MainMenu.unity按Play，或開目前HTTP預覽親自試玩；需要重建時依BUILD.md執行。若日後發布itch.io，使用已驗證ZIP，由使用者決定並操作，本次沒有待批准步驟。
+
+## 2026-11-17 — World 1 forest/waterfall art pack
+- Implemented four animated water tile types (4 frames each), river/waterfall prefabs, tall elevation-aware forest/mountain backdrop, six-frame goat drowning sequence, and optional deep-water respawn integration.
+- Completed stone-goat checkpoint last: dormant gray statue, cracking activation, green eyes/cracks and looping green aura. Connected via RoomCheckpoint.stoneVisual.
+- Added Debug Mode entry 08 and `Assets/_OneMoreTime/Scenes/Debug_WorldOneArt.unity`; Up/Down elevation, Space drowning, C statue, Esc menu.
+- PASS: real Unity 6000.6.0f1 compilation/build APIs and two focused Play mode tests. Visually checked actual camera renders of animated water, goat drowning and activated statue.
+- Existing room layouts were preserved. New water hazards/backdrop/statue are reusable prefabs for placement during the World 1 layout pass. No remote push/publication.
+- Usage/provenance: `Docs/Codex/WORLD_ONE_ART.md`. Next: place these assets in the World 1 layouts when specified.
+
+### 2026-11-17 — Drowning redraw
+Replaced the rejected opening poses: horizontal goat silhouette, no upright torso/arm-like forelegs, submerged legs hidden, restrained splash, progressive sinking. Re-sliced all six frames using measured water-surface pivots, keeping existing sprite references. Visually inspected all six frames at game scale in Unity. Exact built-in imagegen prompt: `Docs/Codex/DROWNING_REDRAW_PROMPT.md`.
+
+### 2026-11-17 — Gameplay-looping forest background
+Added ForestWaterfallLoop.png and OneMoreTime/Looping Forest shader. The background prefab now repeats in both axes with adjustable parallax, repeat size and edge overlap, and no climb bounds. Original scenic image retained. Debug preview Up/Down scrolling is unlimited. PASS: 3/3 WorldOneArtTests in real Unity Play mode; actual camera render checked with both wrap boundaries in view. Usage: WORLD_ONE_ART.md; exact built-in imagegen prompt: BACKGROUND_LOOP_PROMPT.md.

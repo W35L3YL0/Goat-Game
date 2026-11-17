@@ -15,6 +15,9 @@ public sealed class MainRoom : MonoBehaviour {
  public Transform sky;
  Vector2 previous;
  public Font font;
+ public WaterHazard[] waterHazards=new WaterHazard[0];
+ WorldOneSequence drowning;
+ public bool IsDrowning=>drowning!=null;
  public ShutterAbility shutter;
  public RoomMechanisms mechanisms;
  public RoomLift lift;
@@ -48,6 +51,7 @@ public sealed class MainRoom : MonoBehaviour {
  public void Step(InputFrame frame,float dt){
   if(Paused||Phase==RoomPhase.Complete)return;
   previous=player.Position;
+  if(drowning!=null){drowning.Tick(dt);if(drowning.Finished){Destroy(drowning.gameObject);drowning=null;visual.renderer2D.enabled=true;Respawn();}return;}
   if(shutter!=null&&shutter.Tick(dt)){input.ClearActions();Pose();return;}
   phaseTime+=dt;checkpointNotice=Mathf.Max(0,checkpointNotice-dt);
   if(Phase==RoomPhase.Entering&&lift!=null&&lift.arrival){
@@ -75,6 +79,7 @@ public sealed class MainRoom : MonoBehaviour {
    if(lift!=null&&lift.ReadyToBoard){lift.Board();Phase=RoomPhase.Exiting;phaseTime=0;input.Clear();}
    if(checkpoints.Length>0){foreach(var mark in checkpoints)if(!mark.Saved&&Vector2.Distance(player.Position,mark.transform.position)<1.25f){checkpoint=mark.transform.position;mark.Save();CheckpointSaved=true;checkpointNotice=3;}}
    else if(!CheckpointSaved&&Vector2.Distance(player.Position,checkpoint)<1.45f){CheckpointSaved=true;checkpointNotice=3;SetEyes();}
+   foreach(var water in waterHazards)if(water!=null&&water.drowningPrefab!=null&&water.Contains(player.Position)){Deaths++;drowning=Instantiate(water.drowningPrefab,player.Position,Quaternion.identity);drowning.autoPlay=false;drowning.target.flipX=player.Facing<0;drowning.Play();visual.renderer2D.enabled=false;input.Clear();return;}
    if(player.Position.y<deathY){Deaths++;Respawn();return;}
    if(lift==null&&player.Position.x>=exitX&&player.Position.y>=exitFloor-.1f&&player.Grounded){Phase=RoomPhase.Exiting;phaseTime=0;input.Clear();}
   }

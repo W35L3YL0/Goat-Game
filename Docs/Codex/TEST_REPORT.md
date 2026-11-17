@@ -801,3 +801,24 @@ HTTP server：`python3 -m http.server 8765 --bind 127.0.0.1 --directory Artifact
 - `browser-console.json` 保留幾次載入時無source URL的MutationObserver.observe TypeError。已查本專案HTML／loader／framework無MutationObserver字串，推測屬瀏覽器附加環境，來源仍未確認；不能把它說成已修復或主控台零錯誤。未造成遊戲載入／輸入／四關流程阻塞，未觀察到Unity NullReference或Missing Script。
 - UI-05新手試玩NOT RUN；Safari／Firefox、手機觸控、外接音訊設備未测。本規格為鍵盤桌面demo，無需帳號或伺服器。
 - 無公開發布、無Git commit/push。後續若要發布，使用者可自行上傳已驗證ZIP。
+
+## 2026-11-17 — Forest and Grand Waterfall art
+- PASS — Unity real Editor asset generation (`unity command eval 'OneMoreTime.EditorTools.WorldOneArtBuilder.Build(); ...'`); PNG imports, sprites, TileBase assets, prefabs and gallery scene saved with Unity APIs.
+- PASS — `unity command run_tests --mode playmode --filter WorldOneArtTests --async_tests --format json`: 2/2 passed, 0 failed (0.23 s reported by runner).
+  - ArtLoopsBackgroundAndCheckpoint: 4 frames per tile, transparent water air, drowning progression/final frame, stone activation/idle, background covers view at low/middle/high elevations.
+  - DeepWaterDrownsThenRespawnsWithoutReload: live sprite hidden during sequence, one death, restored at start, same scene remains loaded.
+- PASS — camera-render inspection for water transparency, background, goat/stone relative size, drowning frame; screenshots in `Artifacts/Logs/worldone-*.png` (local evidence, not runtime assets).
+- Initial compile caught unsupported NUnit `Is.AnyOf`; replaced with supported assertion and reran successfully. CLI recompile wrapper dropped its connection during domain reload; subsequent Editor eval/test execution confirmed compilation rather than assuming wrapper success.
+- Initial water sheet had opaque white air; regenerated transparency with imagegen and verified alpha=0 in Unity. Impact foam adjusted to meet waterfall body in final prefab.
+- NOT RUN — full game regression, standalone player build, and human playthrough of a new World 1 level. This task delivers reusable art and a debug gallery; no new room layout was requested.
+
+### 2026-11-17 — Redrawn drowning sequence
+- PASS: revised sprite sheet imported and existing six Sprite assets updated through Unity `WorldOneArtBuilder.BuildDrowning()`; frame pivots measured from opaque turquoise surface rows.
+- PASS: inspected actual camera render of all six frames, including the three opening poses; horizontal silhouette, hidden submerged limbs, aligned surface. Evidence: `Artifacts/Logs/drowning-redraw.png`.
+- PASS: `unity command run_tests --mode playmode --filter WorldOneArtTests --async_tests --format json`, 2/2 passed, 0 failed, runner duration 0.3 s. Sequence completion and same-room drowning respawn preserved.
+
+### 2026-11-17 — Looping background
+- PASS: Unity builder saved updated background sprite/material/prefab/gallery, shader supported by Editor renderer.
+- PASS: `unity command run_tests --mode playmode --filter WorldOneArtTests --async_tests --format json`: 3 passed / 0 failed, duration 0.35s. Checks full-repeat phase equivalence on both axes, negative/high travel (-1000 to 2000), camera coverage and existing animation/respawn behaviors.
+- PASS: actual camera render inspected with both wrap boundaries centered (`Artifacts/Logs/background-loop-wrap.png`). Edge overlap avoids a hard image cut; overlapping scenery has a soft mist-like blend in the joining strips.
+- NOT RUN: standalone build; extended human gameplay session.

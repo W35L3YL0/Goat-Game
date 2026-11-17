@@ -2,6 +2,7 @@ using UnityEngine;using UnityEngine.SceneManagement;
 namespace OneMoreTime {
 public static class SceneFlow {
  public static readonly string[] Scenes={"MainMenu","L01_Freeze","L02_Pressure","L03_Trace","L04_Timing","Ending"};
+ public static void LoadWorldOneGallery(){Time.timeScale=1;SceneManager.LoadScene("Debug_WorldOneArt");}
  static bool upgradedReplayRequested;
  public static bool ConsumeReplayUpgrade(){bool requested=upgradedReplayRequested;upgradedReplayRequested=false;return requested;}
  public static void LoadRewindPlaytest(bool upgraded=false){upgradedReplayRequested=upgraded;Time.timeScale=1;
